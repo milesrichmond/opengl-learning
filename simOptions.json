@@ -1,0 +1,19 @@
+{
+    "targetScene" : 1,
+    "gameSpeed" : 1.0,
+    "gravityModifier" : 1.0,
+
+    "font" : {
+        "file" : "resources/font/Unispace Rg.otf",
+        "scale" : 0.5
+    },
+    
+    "paths" : {
+        "shaders" : {
+            "textFrag" : "src/text.fs", 
+            "textVert" : "src/text.vs",
+            "regFrag"  : "src/simple.fs",
+            "regVert"  : "src/simple.vs"
+        }
+    }
+}

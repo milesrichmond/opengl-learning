@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/Users/mrichmon/dev/c++/opengl-learning/build",
+  "command": "/usr/bin/clang++  -I/System/Library/Frameworks -I/Users/mrichmon/dev/c++/opengl-learning/build/configuration -I/opt/homebrew/include -I/opt/homebrew/include/freetype2 -I/Users/mrichmon/dev/c++/opengl-learning/includes -Wall -g -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -o CMakeFiles/STB_IMAGE.dir/src/stb_image.cpp.o -c /Users/mrichmon/dev/c++/opengl-learning/src/stb_image.cpp",
+  "file": "/Users/mrichmon/dev/c++/opengl-learning/src/stb_image.cpp",
+  "output": "CMakeFiles/STB_IMAGE.dir/src/stb_image.cpp.o"
+},
+{
+  "directory": "/Users/mrichmon/dev/c++/opengl-learning/build",
+  "command": "/usr/bin/clang  -I/System/Library/Frameworks -I/Users/mrichmon/dev/c++/opengl-learning/build/configuration -I/opt/homebrew/include -I/opt/homebrew/include/freetype2 -I/Users/mrichmon/dev/c++/opengl-learning/includes -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -o CMakeFiles/GLAD.dir/src/glad.c.o -c /Users/mrichmon/dev/c++/opengl-learning/src/glad.c",
+  "file": "/Users/mrichmon/dev/c++/opengl-learning/src/glad.c",
+  "output": "CMakeFiles/GLAD.dir/src/glad.c.o"
+},
+{
+  "directory": "/Users/mrichmon/dev/c++/opengl-learning/build",
+  "command": "/usr/bin/clang++  -I/System/Library/Frameworks -I/Users/mrichmon/dev/c++/opengl-learning/build/configuration -I/opt/homebrew/include -I/opt/homebrew/include/freetype2 -I/Users/mrichmon/dev/c++/opengl-learning/includes -F/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks -Wall -g -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -o CMakeFiles/openGL-Learning.dir/src/main.cpp.o -c /Users/mrichmon/dev/c++/opengl-learning/src/main.cpp",
+  "file": "/Users/mrichmon/dev/c++/opengl-learning/src/main.cpp",
+  "output": "CMakeFiles/openGL-Learning.dir/src/main.cpp.o"
+}
+]

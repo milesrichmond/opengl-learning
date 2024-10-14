@@ -1,0 +1,5 @@
+/Users/mrichmon/dev/c++/opengl-learning/build/CMakeFiles/STB_IMAGE.dir
+/Users/mrichmon/dev/c++/opengl-learning/build/CMakeFiles/GLAD.dir
+/Users/mrichmon/dev/c++/opengl-learning/build/CMakeFiles/openGL-Learning.dir
+/Users/mrichmon/dev/c++/opengl-learning/build/CMakeFiles/edit_cache.dir
+/Users/mrichmon/dev/c++/opengl-learning/build/CMakeFiles/rebuild_cache.dir
