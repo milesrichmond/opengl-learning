@@ -56,6 +56,15 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.processMouseScroll(static_cast<float>(yoffset));
 }
 
+// Part of function contents from a stackoverflow post by AlexD on Mar 22, 2015
+// https://stackoverflow.com/a/29200671 
+std::string floatPrecision(float value, int precision) {
+    std::stringstream stream;
+    stream.fill(' ');
+    stream << std::setw(3) << std::setprecision(precision) << value;
+    return stream.str();
+}
+
 class Instance {
 public:
     // Once again, appeasing the almighty c++ compiler
@@ -115,7 +124,30 @@ public:
             model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
             shaderProgram.setMat4("model", model);
 
-            textRenderer.RenderText(std::to_string(1 / displayedFrameTime) + " FPS", 5.0f, 10.0f, Options::Font::scale, glm::vec3(0.8f, 0.8f, 0.8f), SCR_HEIGHT, SCR_WIDTH);
+            textRenderer.RenderText(
+                floatPrecision(displayedFrameTime * 1000, 3) + " ms", 
+                5.0f, 10.0f, 
+                Options::Font::scale, 
+                glm::vec3(0.8f, 0.8f, 0.8f), 
+                SCR_HEIGHT, SCR_WIDTH
+            );
+            if (Options::isPaused) {
+                textRenderer.RenderText(
+                    "Game Speed: " + floatPrecision(Options::gameSpeed, 2) + "x (paused)",
+                    5.0f, 50.0f, 
+                    Options::Font::scale, glm::vec3(0.8f, 0.8f, 0.8f), 
+                    SCR_HEIGHT, SCR_WIDTH
+                );
+            } else {
+                textRenderer.RenderText(
+                    "Game Speed: " + floatPrecision(Options::gameSpeed, 2) + "x",
+                    5.0f, 50.0f, 
+                    Options::Font::scale, glm::vec3(0.8f, 0.8f, 0.8f), 
+                    SCR_HEIGHT, SCR_WIDTH
+                );
+            }
+            
+
             if (Options::isPaused) {
                 engn.draw(shaderProgram, 0);
             } else {
@@ -207,14 +239,24 @@ private:
         }
 
         if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-            Options::gameSpeed += avgFrameTime * Options::Controls::zoomSpeed;
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) {
+                Options::gameSpeed = 1.0f;
+            } else {
+                Options::gameSpeed += avgFrameTime * Options::Controls::zoomSpeed;
+            }
         }
         if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            if (Options::gameSpeed - 0.01 > 0) {
-                Options::gameSpeed -= avgFrameTime * Options::Controls::zoomSpeed;
-            } else { // Snaps to zero if close enough
-                Options::gameSpeed = 0.0f;
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) {
+                Options::gameSpeed = 1.0f;
+            } else {
+                if (Options::gameSpeed - 0.01 > 0) {
+                    Options::gameSpeed -= avgFrameTime * Options::Controls::zoomSpeed;
+                } else { // Snaps to zero if close enough
+                    Options::gameSpeed = 0.0f;
+                }
             }
+
+            
         }
         if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
             if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
