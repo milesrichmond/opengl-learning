@@ -1,3 +1,6 @@
+![image]()
+![alt text](https://github.com/milesrichmond/opengl-learning/blob/main/demos/readmeImage.png?raw=true)
+
 ### Overview
 This project is aiming to be a physics simulation, but the actual scope of this is unclear currently. I've always wanted to make some type of simulation like this, but had always struggled with the visualization. 
 
