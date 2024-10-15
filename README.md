@@ -11,7 +11,7 @@ This project is aiming to be a physics simulation, but the actual scope of this 
 - [HIGH] Correct collision detection & bounces (In testing)
 - [MED] Object rotation 
 - [LOW] Object bounds for more complex shapes
-- [LOW] Optimization (this will always be here and is not high priority):
+- [LOWEST] Optimization (this will always be here and is not high priority):
     - Reduce n^2 cost of gravitational acceleration
 
 ### Important background

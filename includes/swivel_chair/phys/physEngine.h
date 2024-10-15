@@ -44,8 +44,9 @@ public:
 
                 if (PhysMath::haveCollided(target, acting)) {
                     PhysMath::collisionRedirection(target, acting);
-                    target.update(dt);
+                    //target.update(dt);
                 }
+                target.update(dt);
             }
         }
     }
