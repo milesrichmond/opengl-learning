@@ -18,7 +18,6 @@
 #include <iostream>
 #include <vector>
 
-#define GAME_SPEED 1.0
 int SCR_WIDTH = 1920, SCR_HEIGHT = 1080;
 
 // Sure, why not
@@ -117,7 +116,12 @@ public:
             shaderProgram.setMat4("model", model);
 
             textRenderer.RenderText(std::to_string(1 / displayedFrameTime) + " FPS", 5.0f, 10.0f, Options::Font::scale, glm::vec3(0.8f, 0.8f, 0.8f), SCR_HEIGHT, SCR_WIDTH);
-            engn.draw(shaderProgram, deltaTime * Options::gameSpeed);
+            if (Options::isPaused) {
+                engn.draw(shaderProgram, 0);
+            } else {
+                engn.draw(shaderProgram, deltaTime * Options::gameSpeed);
+            }
+            
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------
@@ -200,7 +204,25 @@ private:
         if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
             engn.clearObjects();
             engn.loadObjectsFromJSON(Stock::scenes[Options::targetScene]);
-        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+            Options::gameSpeed += avgFrameTime * Options::Controls::zoomSpeed;
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            if (Options::gameSpeed - 0.01 > 0) {
+                Options::gameSpeed -= avgFrameTime * Options::Controls::zoomSpeed;
+            } else { // Snaps to zero if close enough
+                Options::gameSpeed = 0.0f;
+            }
+        }
+        if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+                Options::isPaused = false;
+            } else {
+                Options::isPaused = true;
+            }
+        }
 
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
             camera.processKeyboard(FORWARD, deltaTime);

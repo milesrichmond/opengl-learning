@@ -7,11 +7,15 @@
 // Loaded options from an options.json
 namespace Options {
     std::string optionsPath;
-
     int targetScene;
 
     float gameSpeed;
+    bool isPaused;
     float gravityModifier;
+
+    namespace Controls {
+        float zoomSpeed = 1.0f;
+    }
 
     namespace Font {
         std::string file;
