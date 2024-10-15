@@ -81,6 +81,10 @@ public:
             objects.insert(objects.end(), PhysObject(id, object["mass"], vec3FromJSON(position), vec3FromJSON(velocity), vec3FromJSON(scale)));
         }
     }
+
+    void clearObjects() {
+        objects.clear();
+    }
 private:
     std::vector<PhysObject> objects;
 };
