@@ -1,4 +1,3 @@
-![image]()
 ![alt text](https://github.com/milesrichmond/opengl-learning/blob/main/demos/readmeImage.png?raw=true)
 
 ### Overview
