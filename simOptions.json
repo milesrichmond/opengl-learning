@@ -1,7 +1,13 @@
 {
     "targetScene" : 2,
-    "gameSpeed" : 1.0,
+    "gameSpeed" : 0.25,
+    "isPaused" : true,
     "gravityModifier" : 1.0,
+    "restitution" : 0.9,
+
+    "controls" : {
+        "zoomSpeed" : 1.0
+    },
 
     "font" : {
         "file" : "resources/font/Unispace Rg.otf",
