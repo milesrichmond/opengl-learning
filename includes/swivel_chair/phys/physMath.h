@@ -21,7 +21,7 @@ public:
         glm::vec3 normal = glm::normalize(acting.getPosition() - target.getPosition());
         glm::vec3 targetVelocity = target.getVelocity();
 
-        glm::vec3 reflection = targetVelocity - 2 * (glm::dot(targetVelocity, normal)) * normal;
+        glm::vec3 reflection = Options::restitution * (targetVelocity - 2 * (glm::dot(targetVelocity, normal)) * normal);
         target.collide(reflection);
     }
 

@@ -39,13 +39,16 @@ public:
             for(PhysObject &acting : objects) {
                 if (target.id == acting.id) { continue; }
 
+                if (PhysMath::haveCollided(target, acting)) {
+                    PhysMath::collisionRedirection(target, acting);
+                    target.update(dt);
+                    continue;
+                }
+
                 acceleration = PhysMath::calculateAttraction(target, acting);
                 target.accelerate(acceleration);
 
-                if (PhysMath::haveCollided(target, acting)) {
-                    PhysMath::collisionRedirection(target, acting);
-                    //target.update(dt);
-                }
+                
                 target.update(dt);
             }
         }

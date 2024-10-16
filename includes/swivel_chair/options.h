@@ -12,6 +12,7 @@ namespace Options {
     float gameSpeed;
     bool isPaused;
     float gravityModifier;
+    float restitution = 0.9;
 
     namespace Controls {
         float zoomSpeed = 1.0f;
