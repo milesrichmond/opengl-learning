@@ -12,7 +12,7 @@ namespace Options {
     float gameSpeed;
     bool isPaused;
     float gravityModifier;
-    float restitution = 0.9;
+    float restitution = 0.95; // Value should not be > 0.95 or we start making momentum from nothing
 
     namespace Controls {
         float zoomSpeed = 1.0f;
@@ -28,7 +28,8 @@ namespace Options {
 namespace Stock {
     const std::string scenes[] = {
         FileSystem::getPath("resources/scenes/scene0.json"),
-        FileSystem::getPath("resources/scenes/scene1.json")
+        FileSystem::getPath("resources/scenes/scene1.json"),
+        FileSystem::getPath("resources/scenes/scene2.json")
     };
 
     namespace Models {

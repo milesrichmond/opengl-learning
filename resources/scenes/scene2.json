@@ -1,0 +1,32 @@
+{
+    "Particle1" : {
+        "mass" : 10000,
+        "scale" : [0.2, 0.2, 0.2],
+        "position" : [-0.5, 0.0, 0.0],
+        "velocity" : [0.0, 0.0, 0.0]
+    },
+    "Particle2" : {
+        "mass" : 10000,
+        "scale" : [0.2, 0.2, 0.2],
+        "position" : [0.5, 0.0, 0.0],
+        "velocity" : [0.0, 0.0, 0.0]
+    },
+    "Particle3" : {
+        "mass" : 10000,
+        "scale" : [0.2, 0.2, 0.2],
+        "position" : [0.0, 0.5, 0.0],
+        "velocity" : [0.0, 0.0, 0.0]
+    },
+    "Particle4" : {
+        "mass" : 10000,
+        "scale" : [0.2, 0.2, 0.2],
+        "position" : [0.5, -0.5, 0.0],
+        "velocity" : [0.0, 0.0, 0.0]
+    },
+    "Particle5" : {
+        "mass" : 10000,
+        "scale" : [0.2, 0.2, 0.2],
+        "position" : [0.0, 0.0, 0.0],
+        "velocity" : [0.0, 0.0, 0.0]
+    }
+}
