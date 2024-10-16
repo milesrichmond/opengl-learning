@@ -14,11 +14,19 @@
 #include <swivel_chair/phys/physEngine.h>
 
 #include <swivel_chair/options.h>
+#include <swivel_chair/state.h>
 
 #include <iostream>
 #include <vector>
 
 int SCR_WIDTH = 1920, SCR_HEIGHT = 1080;
+
+Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = 800 / 2.0f;
+float lastY = 600 / 2.0f;
+bool firstMouse = true;
+
+PhysEngine engn = PhysEngine();
 
 // Sure, why not
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -26,11 +34,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     SCR_HEIGHT = height;
     glViewport(0, 0, width, height);
 }
-
-Camera camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = 800 / 2.0f;
-float lastY = 600 / 2.0f;
-bool firstMouse = true;
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
     float xpos = static_cast<float>(xposIn);
@@ -54,6 +57,57 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.processMouseScroll(static_cast<float>(yoffset));
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    // Close window
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+
+    // Reload Scene
+    if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
+        engn.clearObjects();
+        engn.loadObjectsFromJSON(Stock::scenes[Options::targetScene]);
+    }
+    
+    // Pausing + gameSpeed reset
+    if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+        if (mods == GLFW_MOD_CONTROL) {
+            Options::gameSpeed = 1.0f;
+        } else {
+            Options::isPaused = !Options::isPaused;
+        }   
+    }
+
+    // Game Speed
+    if (key == GLFW_KEY_UP && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+        Options::gameSpeed += Options::Controls::zoomSpeed * State::deltaTime;
+    }
+    if (key == GLFW_KEY_DOWN && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+        if (Options::gameSpeed < Options::Controls::zoomSpeed * State::deltaTime) {
+            Options::gameSpeed = 0.0f;
+        } else {
+            Options::gameSpeed -= Options::Controls::zoomSpeed * State::deltaTime;
+        }
+    }
+}
+
+// Used in combination with the key_callback method to provide a smooth input for WASD controls
+// while still supporting the single key presses from the callback
+void keyboard_input_by_frame(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        camera.processKeyboard(FORWARD, State::deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        camera.processKeyboard(BACKWARD, State::deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        camera.processKeyboard(LEFT, State::deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camera.processKeyboard(RIGHT, State::deltaTime);
+    }
 }
 
 // Part of function contents from a stackoverflow post by AlexD on Mar 22, 2015
@@ -91,18 +145,16 @@ public:
         while (!glfwWindowShouldClose(window)) {
             // per-frame time logic
             // --------------------
-            float currentFrame = static_cast<float>(glfwGetTime());
-            deltaTime = currentFrame - lastFrame;
-            lastFrame = currentFrame;
-            avgFrameTime = (avgFrameTime + deltaTime) / 2;
+            float timeOfCurrentFrame = static_cast<float>(glfwGetTime());
+            State::deltaTime = timeOfCurrentFrame - State::timeOfLastFrame;
+            State::timeOfLastFrame = timeOfCurrentFrame;
+            State::avgFrameTime = (State::avgFrameTime + State::deltaTime) / 2;
 
-            if(fmod(currentFrame, 0.25) < 0.01) {
-                displayedFrameTime = avgFrameTime;
-            } 
+            if(fmod(timeOfCurrentFrame, 0.25) < 0.01) {
+                displayedFrameTime = State::avgFrameTime;
+            }
 
-            // input
-            // -----
-            processInput(window);
+            keyboard_input_by_frame(window);
 
             // render
             // ------
@@ -133,14 +185,14 @@ public:
             );
             if (Options::isPaused) {
                 textRenderer.RenderText(
-                    "Game Speed: " + floatPrecision(Options::gameSpeed, 2) + "x (paused)",
+                    "Game Speed: " + floatPrecision(Options::gameSpeed, 3) + "x (paused)",
                     5.0f, 50.0f, 
                     Options::Font::scale, glm::vec3(0.8f, 0.8f, 0.8f), 
                     SCR_HEIGHT, SCR_WIDTH
                 );
             } else {
                 textRenderer.RenderText(
-                    "Game Speed: " + floatPrecision(Options::gameSpeed, 2) + "x",
+                    "Game Speed: " + floatPrecision(Options::gameSpeed, 3) + "x",
                     5.0f, 50.0f, 
                     Options::Font::scale, glm::vec3(0.8f, 0.8f, 0.8f), 
                     SCR_HEIGHT, SCR_WIDTH
@@ -151,7 +203,7 @@ public:
             if (Options::isPaused) {
                 engn.draw(shaderProgram, 0);
             } else {
-                engn.draw(shaderProgram, deltaTime * Options::gameSpeed);
+                engn.draw(shaderProgram, State::deltaTime * Options::gameSpeed);
             }
             
 
@@ -174,16 +226,12 @@ private:
     const static unsigned int DEFAULT_SCR_WIDTH = 1920, DEFAULT_SCR_HEIGHT = 1080;
 
     bool isInit = false;
-
-    float deltaTime = 0.0f;
-    float lastFrame = 0.0f;
-    float avgFrameTime = 0.01f;
     float displayedFrameTime = 0.0f;
 
     GLFWwindow* window;
     Shader shaderProgram = Shader();
 
-    PhysEngine engn = PhysEngine();
+    
 
     TextRenderer textRenderer = TextRenderer();
 
@@ -208,6 +256,7 @@ private:
         glfwMakeContextCurrent(window);
         // NO LONGER TRUE, HAD TO MOVE TO MACOS | I'm pretty sure none of these get used with my window manager (i3), so I commented them out
         glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // Turns out this one is needed
+        glfwSetKeyCallback(window, key_callback);
         glfwSetCursorPosCallback(window, mouse_callback);
         glfwSetScrollCallback(window, scroll_callback);
 
@@ -230,67 +279,6 @@ private:
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    void processInput(GLFWwindow *window) {
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
-
-        if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
-            engn.clearObjects();
-            engn.loadObjectsFromJSON(Stock::scenes[Options::targetScene]);
-        }
-
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) {
-                Options::gameSpeed = 1.0f;
-            } else {
-                Options::gameSpeed += avgFrameTime * Options::Controls::zoomSpeed;
-            }
-        }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) {
-                Options::gameSpeed = 1.0f;
-            } else {
-                if (Options::gameSpeed - 0.01 > 0) {
-                    Options::gameSpeed -= avgFrameTime * Options::Controls::zoomSpeed;
-                } else { // Snaps to zero if close enough
-                    Options::gameSpeed = 0.0f;
-                }
-            }
-
-            
-        }
-        if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-                Options::isPaused = false;
-            } else {
-                Options::isPaused = true;
-            }
-        }
-
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            camera.processKeyboard(FORWARD, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            camera.processKeyboard(BACKWARD, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            camera.processKeyboard(LEFT, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            camera.processKeyboard(RIGHT, deltaTime);
-
-        if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-            camera.processKeyboard(LOOK_UP, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-            camera.processKeyboard(LOOK_DOWN, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-            camera.processKeyboard(LOOK_LEFT, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-            camera.processKeyboard(LOOK_RIGHT, deltaTime);
-
-        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-            camera.processKeyboard(ZOOM_IN, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-            camera.processKeyboard(ZOOM_OUT, deltaTime);
-    }
-
     void loadFromJSON(std::string const optionsPath) {
         std::ifstream file(optionsPath, std::ifstream::binary);
         if (!file.is_open()) {
@@ -300,8 +288,13 @@ private:
 
         Options::optionsPath = optionsPath;
         Options::targetScene = data["targetScene"];
+
         Options::gameSpeed = data["gameSpeed"];
+        Options::isPaused = data["isPaused"];
         Options::gravityModifier = data["gravityModifier"];
+        Options::restitution = data["restitution"];
+
+        Options::Controls::zoomSpeed = data["controls"]["zoomSpeed"];
 
         Options::Font::file = data["font"]["file"];
         Options::Font::scale = data["font"]["scale"];
