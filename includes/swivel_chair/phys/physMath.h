@@ -21,18 +21,19 @@ public:
         glm::vec3 normal = glm::normalize(acting.getPosition() - target.getPosition());
         glm::vec3 targetVelocity = target.getVelocity();
         
-        // Floating point tolerance?
-        if (fabs(targetVelocity.x - 0.0001) < 0) {
-            targetVelocity.x = 0.0f;
+        glm::vec3 reflection = Options::restitution * (targetVelocity - 2 * (glm::dot(targetVelocity, normal)) * normal);
+        
+        // Floating point tolerances?
+        if (fabs(reflection.x - 0.001) < 0) {
+            reflection.x = 0.0f;
         }
-        if (fabs(targetVelocity.y - 0.0001) < 0) {
-            targetVelocity.y = 0.0f;
+        if (fabs(reflection.y - 0.001) < 0) {
+            reflection.y = 0.0f;
         }
-        if (fabs(targetVelocity.z - 0.0001) < 0) {
-            targetVelocity.z = 0.0f;
+        if (fabs(reflection.z - 0.001) < 0) {
+            reflection.z = 0.0f;
         }
         
-        glm::vec3 reflection = Options::restitution * (targetVelocity - 2 * (glm::dot(targetVelocity, normal)) * normal);
         target.setVelocity(reflection);
     }
 

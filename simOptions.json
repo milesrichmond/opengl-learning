@@ -1,6 +1,6 @@
 {
     "targetScene" : 2,
-    "gameSpeed" : 0.25,
+    "gameSpeed" : 1.0,
     "isPaused" : true,
     "gravityModifier" : 1.0,
     "restitution" : 0.9,
