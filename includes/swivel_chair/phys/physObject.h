@@ -30,7 +30,6 @@ public:
         velocity += acceleration * dt;
         position += velocity * dt;
         updateModel(dt);
-        std::cout << acceleration.x << std::endl;
         acceleration = glm::vec3(0.0f);
     }
 

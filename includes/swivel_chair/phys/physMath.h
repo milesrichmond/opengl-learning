@@ -11,9 +11,6 @@ public:
     static glm::vec3 calculateAttraction(PhysObject &target, PhysObject &acting) {
         glm::vec3 direction = glm::normalize(acting.getPosition() - target.getPosition());
         float distance = glm::distance(target.getPosition(), acting.getPosition());
-        if (distance < acting.getRadius() + target.getRadius()) {
-            return glm::vec3(0.0f);
-        }
         float accelMag = ((target.getMass() + acting.getMass()) / pow(distance, 2)) / target.getMass();
 
         return direction * accelMag * Options::gravityModifier;
@@ -22,9 +19,19 @@ public:
     // reflection vec = incoming vec - 2(incoming {dot} normal) x normal
     static void collisionRedirection(PhysObject &target, PhysObject &acting) {
         glm::vec3 normal = glm::normalize(acting.getPosition() - target.getPosition());
-        //target.setPosition(normal * (target.getRadius() + acting.getRadius()));
         glm::vec3 targetVelocity = target.getVelocity();
-
+        
+        // Floating point tolerance?
+        if (fabs(targetVelocity.x - 0.0001) < 0) {
+            targetVelocity.x = 0.0f;
+        }
+        if (fabs(targetVelocity.y - 0.0001) < 0) {
+            targetVelocity.y = 0.0f;
+        }
+        if (fabs(targetVelocity.z - 0.0001) < 0) {
+            targetVelocity.z = 0.0f;
+        }
+        
         glm::vec3 reflection = Options::restitution * (targetVelocity - 2 * (glm::dot(targetVelocity, normal)) * normal);
         target.setVelocity(reflection);
     }
