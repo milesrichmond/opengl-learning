@@ -233,7 +233,8 @@ public:
     }
 
 private:
-    const static unsigned int DEFAULT_SCR_WIDTH = 1920, DEFAULT_SCR_HEIGHT = 1080;
+    const static unsigned int DEFAULT_SCR_WIDTH = 1920;
+    const static unsigned int DEFAULT_SCR_HEIGHT = 1080;
 
     bool isInit = false;
     float displayedFrameTime = 0.0f;

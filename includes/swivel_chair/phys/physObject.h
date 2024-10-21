@@ -30,15 +30,16 @@ public:
         velocity += acceleration * dt;
         position += velocity * dt;
         updateModel(dt);
-        acceleration *= 0.0f;
+        std::cout << acceleration.x << std::endl;
+        acceleration = glm::vec3(0.0f);
     }
 
     void accelerate(glm::vec3 &acceleration) {
         this->acceleration += acceleration;
     }
 
-    void collide(glm::vec3 reflection) {
-        velocity = reflection;
+    void setVelocity(glm::vec3 velocity) {
+        this->velocity = velocity;
     }
 
     void setPosition(glm::vec3 position) {
