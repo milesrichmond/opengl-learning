@@ -19,6 +19,7 @@ public:
     // reflection vec = incoming vec - 2(incoming {dot} normal) x normal
     static void collisionRedirection(PhysObject &target, PhysObject &acting) {
         glm::vec3 normal = glm::normalize(acting.getPosition() - target.getPosition());
+        //target.setPosition(normal * (target.getRadius() + acting.getRadius()));
         glm::vec3 targetVelocity = target.getVelocity();
 
         glm::vec3 reflection = Options::restitution * (targetVelocity - 2 * (glm::dot(targetVelocity, normal)) * normal);

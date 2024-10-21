@@ -36,19 +36,18 @@ public:
         // n^2, yay
         glm::vec3 acceleration;
         for (PhysObject &target : objects) {
+            std::cout << target.getPosition().x << std::endl;
             for(PhysObject &acting : objects) {
                 if (target.id == acting.id) { continue; }
-
-                if (PhysMath::haveCollided(target, acting)) {
-                    PhysMath::collisionRedirection(target, acting);
-                    target.update(dt);
-                    continue;
-                }
 
                 acceleration = PhysMath::calculateAttraction(target, acting);
                 target.accelerate(acceleration);
 
-                
+                if (PhysMath::haveCollided(target, acting)) {
+                    PhysMath::collisionRedirection(target, acting);
+                    
+                }
+
                 target.update(dt);
             }
         }

@@ -69,6 +69,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
         engn.clearObjects();
         engn.loadObjectsFromJSON(Stock::scenes[Options::targetScene]);
+        State::passedTime = 0.0f;
     }
     
     // Pausing + gameSpeed reset
@@ -149,7 +150,10 @@ public:
             State::deltaTime = timeOfCurrentFrame - State::timeOfLastFrame;
             State::timeOfLastFrame = timeOfCurrentFrame;
             State::avgFrameTime = (State::avgFrameTime + State::deltaTime) / 2;
-
+            if (!Options::isPaused) {
+                State::passedTime += Options::gameSpeed * State::deltaTime;
+            }
+            
             if(fmod(timeOfCurrentFrame, 0.25) < 0.01) {
                 displayedFrameTime = State::avgFrameTime;
             }
@@ -198,7 +202,13 @@ public:
                     SCR_HEIGHT, SCR_WIDTH
                 );
             }
-            
+            textRenderer.RenderText(
+                floatPrecision(State::passedTime, 3) + " s", 
+                5.0f, 100.0f, 
+                Options::Font::scale, 
+                glm::vec3(0.8f, 0.8f, 0.8f), 
+                SCR_HEIGHT, SCR_WIDTH
+            );
 
             if (Options::isPaused) {
                 engn.draw(shaderProgram, 0);

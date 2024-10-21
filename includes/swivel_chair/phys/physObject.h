@@ -41,6 +41,10 @@ public:
         velocity = reflection;
     }
 
+    void setPosition(glm::vec3 position) {
+        this->position = position;
+    }
+
     float getMass() { return mass; }
     glm::vec3 getPosition() { return position; }
     glm::vec3 getVelocity() { return velocity; }
