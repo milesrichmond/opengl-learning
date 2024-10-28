@@ -3,13 +3,13 @@ cmake_policy (VERSION 3.0)
 
 project (openGL-Learning)
 
-set(CMAKE_CXX_STANDARD 17) # this does nothing for MSVC, use target_compile_options below
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
 set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules")
 
-set (CMAKE_CXX_FLAGS "-Wall -g")
+set (CMAKE_CXX_FLAGS "-Wall -Wno-deprecated-declarations -g -O0")
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
@@ -41,7 +41,18 @@ add_library(STB_IMAGE "${CMAKE_SOURCE_DIR}/src/stb_image.cpp")
 add_library(GLAD "src/glad.c")
 set(LIBS ${LIBS} STB_IMAGE GLAD) 
 
-add_executable(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/src/main.cpp")
+set(SOURCES "src/custom/graphics/camera.cpp"
+            "src/custom/graphics/shader.cpp"
+            "src/custom/graphics/textRenderer.cpp"
+            "src/custom/model/mesh.cpp"
+            "src/custom/model/model.cpp"
+            "src/custom/physics/engine.cpp"
+            "src/custom/physics/math.cpp"
+            "src/custom/physics/object.cpp"
+)
+
+add_executable(${PROJECT_NAME} "src/main.cpp")
+target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 include_directories(${GLM_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})

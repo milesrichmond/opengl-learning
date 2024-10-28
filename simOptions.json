@@ -3,7 +3,7 @@
     "gameSpeed" : 1.0,
     "isPaused" : true,
     "gravityModifier" : 1.0,
-    "restitution" : 0.9,
+    "restitution" : 0.0,
 
     "controls" : {
         "zoomSpeed" : 1.0

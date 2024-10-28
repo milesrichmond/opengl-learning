@@ -1,13 +1,12 @@
-#ifndef STATE_H
-#define STATE_H
+#ifndef STATE_HPP
+#define STATE_HPP
 
 namespace State {
-    // Time
     float deltaTime = 0.0f;
     float timeOfLastFrame = 0.0f;
     float avgFrameTime = 0.0f;
     float displayedFrameTime = 0.0f;
-    float passedTime = 0.0f;
+    float timeElapsed = 0.0f;
 }
 
 #endif

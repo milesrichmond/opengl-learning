@@ -1,7 +1,6 @@
 // All credit for this file goes to https://github.com/JoeyDeVries/LearnOpenGL/blob/master/includes/learnopengl/filesystem.h
-
-#ifndef FILESYSTEM_H
-#define FILESYSTEM_H
+#ifndef FILESYSTEM_HPP
+#define FILESYSTEM_HPP
 
 #include <string>
 #include <cstdlib>
@@ -48,5 +47,4 @@ private:
   }
 };
 
-// FILESYSTEM_H
 #endif
